@@ -96,7 +96,7 @@ covindex_gam_betareg <- function(y, t = NULL,
   return(mod)
 }
 
-# Simulation-based confidence and prediction intervals
+# Simulation-based credible and prediction intervals
 # References:
 # Gelman Hill (2007) Data Analysis Using Regression and Multilevel 
 #   Hierarchical Models, Sec. 7.2
@@ -116,7 +116,7 @@ simpred_covindex_gam_betareg <- function(object, newdata,
   phi <- exp(object$family$getTheta())
   rndbeta <- object$family$rd
   
-  # confidence intervals
+  # credible intervals
   beta_sim <- rmvn(nsim, coef(object), 
                    vcov(object, freq=FALSE, unconditional=TRUE))
   Xlp <- predict(object, newdata = newdata, type = "lpmatrix")
