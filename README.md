@@ -1,6 +1,6 @@
 # COVINDEX
 
-COVINDEX based on a GAM beta regression model
+A COVID-19 index based on a GAM beta regression model
 
 R code to reproduce the analysis of the paper:
 
