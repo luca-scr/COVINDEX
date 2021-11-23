@@ -43,13 +43,26 @@ ggplot(COVID19, aes(x = date, y = y, size = swabs)) +
 # Fit the model
 mod = covindex_gam_betareg(
   y = COVID19$y, 
-  t = COVID19$t, 
+  t = COVID19$t,
   x = data.frame(weekend = COVID19$weekend),
   wts = COVID19$swabs/mean(COVID19$swabs, na.rm=TRUE))
 summary(mod)
 
-matplot(mod$k, mod$AIC, type = "o", pch = 20)
-abline(v = mod$k_opt, lty = 2)
+ggplot(as.data.frame(mod[c("k", "df", "AIC")]), aes(x = k, y = AIC)) +
+  geom_line() + 
+  geom_point(col = "white", size = 3) + 
+  geom_point() + 
+  scale_x_continuous(name = "k", breaks = function(lim) pretty(lim, n=9),
+                     sec.axis = sec_axis(trans = approxfun(crit$bs, crit$df), 
+                                         breaks = function(lim) pretty(lim, n=7),
+                                         name = "EDF")) +
+  geom_vline(xintercept = mod$k_opt, lty = 2) +
+  theme_bw()
+
+plot(mod, residuals = TRUE, shade = TRUE, rug = FALSE)
+qq.gam(mod, rep = 100, level = 0.95, type = "deviance", pch = 1)
+
+par(mfrow = c(1,2))
 acf(residuals(mod, type = "deviance"), lag.max = 21)
 pacf(residuals(mod, type = "deviance"), lag.max = 21, ylim = c(-0.5, 0.5))
 

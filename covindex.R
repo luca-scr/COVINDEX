@@ -50,8 +50,8 @@ covindex_gam_betareg <- function(y, t = NULL,
   
   # model selection
   criterion <- match.arg(criterion, choices = c("AIC", "BIC"))
-  crit <- matrix(as.double(NA), nrow = length(k), ncol = 2, 
-                 dimnames = list(NULL, c("AIC", "BIC")))
+  crit <- matrix(as.double(NA), nrow = length(k), ncol = 4, 
+                 dimnames = list(NULL, c("k", "df", "AIC", "BIC")))
   if(length(k) > 1)
   {
     # select smoothing by criterion (AIC or BIC)
@@ -67,10 +67,10 @@ covindex_gam_betareg <- function(y, t = NULL,
                  family = betar(link="logit"), 
                  weights = wts,
                  method = "REML")
-      crit[i,] <- c(AIC(mod), BIC(mod))
+      crit[i,] <- c(k[i], attr(logLik(mod), "df"), AIC(mod), BIC(mod))
     }
-    k_opt <- if(criterion == "AIC") k[which.min(crit[,1])] 
-             else                   k[which.min(crit[,2])] 
+    k_opt <- if(criterion == "AIC") k[which.min(crit[,3])] 
+             else                   k[which.min(crit[,4])] 
     names(k_opt) <- criterion
   } else
   {
@@ -88,9 +88,10 @@ covindex_gam_betareg <- function(y, t = NULL,
              family = betar(link="logit"), 
              weights = wts,
              method = "REML")
-  mod$k <- k
-  mod$AIC <- crit[,1]
-  mod$BIC <- crit[,2]
+  mod$k <- crit[,1]
+  mod$df <- crit[,2]
+  mod$AIC <- crit[,3]
+  mod$BIC <- crit[,4]
   mod$k_opt <- k_opt 
   class(mod) <- c("covindex_gam_betareg", class(mod))
   return(mod)
