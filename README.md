@@ -17,8 +17,8 @@ A weekly report is available for Italy and Italian regions at http://www.stat.un
 
 <br>
 
-<img src="heatmap_tpr.png" width="80%">
+<img src="heatmap_tpr.png" center width="80%">
 
 <br>
 
-<img src="heatmap_covindex.png" width="80%">
+<img src="heatmap_covindex.png" center width="80%">
