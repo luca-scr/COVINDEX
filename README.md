@@ -15,6 +15,6 @@ A weekly report is available for Italy and Italian regions at http://www.stat.un
 
 
 
-![heatmap_tpr](/Users/luca/Stat/COVINDEX/GitHub/COVINDEX/heatmap_tpr.png)
+![heatmap_tpr](heatmap_tpr.png)
 
-![heatmap_covindex](/Users/luca/Stat/COVINDEX/GitHub/COVINDEX/heatmap_covindex.png)
+![heatmap_covindex](heatmap_covindex.png)
