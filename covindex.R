@@ -104,12 +104,14 @@ covindex_gam_betareg <- function(y, t = NULL,
 # Gelman Hill Vehtari (2020) Regression and Other Stories, Sec. 14.3
 
 simpred_covindex_gam_betareg <- function(object, newdata, 
-                                         nsim = 1e4, level = 0.95, ...)
+                                         nsim = 1e4, 
+                                         level = 0.95, ...)
 {
 
   if(missing(newdata) || is.null(newdata)) 
     newdata <- object$model
-
+  nsim <- as.numeric(nsim)
+  level <- as.numeric(level)
   conf_levels <- c((1-level)/2, (1+level)/2)
   
   linkinv <- object$family$linkinv
@@ -118,16 +120,20 @@ simpred_covindex_gam_betareg <- function(object, newdata,
   rndbeta <- object$family$rd
   
   # credible intervals
-  beta_sim <- rmvn(nsim, coef(object), 
-                   vcov(object, freq=FALSE, unconditional=TRUE))
-  Xlp <- predict(object, newdata = newdata, type = "lpmatrix")
-  mu_sim  <- linkinv(Xlp %*% t(beta_sim))
-  credint <- apply(mu_sim, 1, quantile, 
-                   prob = conf_levels, na.rm = TRUE)
-  # prediction intervals
-  y_sim <- apply(mu_sim, 2, function(m) rndbeta(m))
-  predint <- apply(y_sim, 1, quantile, prob = conf_levels, na.rm = TRUE)
-  
+  mu_sim <- y_sim <- credint <- predint <- NULL
+  if(nsim > 1)
+  {
+    beta_sim <- rmvn(nsim, mu = coef(object), 
+                     V = vcov(object, freq=FALSE, unconditional=TRUE))
+    Xlp <- predict(object, newdata = newdata, type = "lpmatrix")
+    mu_sim  <- linkinv(Xlp %*% t(beta_sim))
+    credint <- apply(mu_sim, 1, quantile, 
+                     prob = conf_levels, na.rm = TRUE)
+    # prediction intervals
+    y_sim <- apply(mu_sim, 2, function(m) rndbeta(m))
+    predint <- apply(y_sim, 1, quantile, prob = conf_levels, na.rm = TRUE)
+  }
+   
   out <- list(mu = mu, phi = phi, 
               level = level, nsim = nsim,
               mu_sim = mu_sim,

@@ -10,3 +10,11 @@ A COVID-19 index based on a GAM beta regression model.
 - Instructions:
 
 	- open and execute the code contained in the file `covindex_analyses.R`.
+
+A weekly report is available for Italy and Italian regions at http://www.stat.unipg.it/luca/COVINDEX.html
+
+
+
+![heatmap_tpr](/Users/luca/Stat/COVINDEX/GitHub/COVINDEX/heatmap_tpr.png)
+
+![heatmap_covindex](/Users/luca/Stat/COVINDEX/GitHub/COVINDEX/heatmap_covindex.png)
